@@ -105,8 +105,9 @@ class githubSignIn(OAuthSignIn):
                   'scope': 'user:email ,public_repo',
                   'redirect_uri': self.get_callback_url()}
         )
-        
+
         me = oauth_session.get('user').json()
+        print(me)
         return (
             'github$' + str(me['id']),
             me.get('login'),

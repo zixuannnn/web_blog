@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+	<style type="text/css">
+		.text {
+		  display: block;
+		  width: 1000px;
+		  overflow: hidden;
+		  white-space: nowrap;
+		  text-overflow: ellipsis;
+		}
+	</style>
+    <meta charset="UTF-8">
+    <title>Blog Main Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">Blog</a>
+            <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Get Appraisal</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+    <li class="nav-item dropdown">
+    {% if id != -1 %}
+    <li class="nav-item">
+                <a class="nav-link" href="#">Dear {{ name }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('Login') }}">Login Here</a>
+    </li>
+    {% endif %}
+  </li>
+</ul>
+    </nav>
+
+
+    <div class="jumbotron text-center" style ="padding-top:0%;padding-bottom: 0% line-height: 0%" >
+        <h1 class="display-3" align="center"style ="padding: 0px" >Python Category</h1>
+</div>
+    <a href="#">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row1.title }}</h1>
+        <span class="text">{{ row1.content }}</span>
+        <span class="text">Published on: {{ row1.post_date }}</span>
+        <p style="text-align:right;">View: {{ row1.view_times }}</p>
+    </div></a><br>
+    <a href="#">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row2.title }}</h1>
+        <span class="text">{{ row2.content }}</span>
+        <span class="text">Published on: {{ row2.post_date }}</span>
+        <p style="text-align:right;">View: {{ row2.view_times }}</p>
+    </div></a><br>
+    <a href="#">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row3.title }}</h1>
+        <span class="text">{{ row3.content }}</span>
+        <span class="text">Published on: {{ row3.post_date }}</span>
+        <p style="text-align:right;">View: {{ row3.view_times }}</p>
+    </div></a><br>
+    <a href="#">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row4.title }}</h1>
+        <span class="text">{{ row4.content }}</span>
+        <span class="text">Published on: {{ row4.post_date }}</span>
+        <p style="text-align:right;">View: {{ row4.view_times }}</p>
+    </div></a><br>
+    
+	{% if id != -1 %}
+    <form method="get" action="{{ url_for('AfterLogin', id=id) }}">
+    	<input class="btn btn-primary btn-lg" type="submit" value="Go back to Main Page">
+    </form>
+    {% else %}
+    <form method="get" action="{{ url_for('Main_Page') }}">
+    	<input class="btn btn-primary btn-lg" type="submit" value="Go back to Main Page">
+    </form>
+    {% endif %}
+
+</div>
+</div>
+</body>
+</html>

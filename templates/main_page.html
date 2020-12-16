@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Main Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">Blog</a>
+            <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Get Appraisal</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+    <li class="nav-item dropdown">
+    {% if login == True %}
+    <li class="nav-item">
+                <a class="nav-link" href="#">Dear {{ name }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('Login') }}">Login Here</a>
+    </li>
+    {% endif %}
+  </li>
+</ul>
+    </nav>
+
+
+    <div class="jumbotron text-center" style ="padding-top:5%;padding-bottom: 5% line-height: 10%" >
+        <h1 class="display-3" align="center"style ="padding: 0px" >Blog</h1>
+        <p class="lead" align="center" style ="height: 10%">Start your Idea Here</p>
+    </div>
+    {% if login == True %}
+    <div style ="padding-top:5%;padding-bottom: 5% line-height: 10%" >
+        <p class="lead" align="center" >
+    <a class="btn btn-primary btn-lg" href="{{ url_for('category_python', id=id) }}" role="button" >
+        Python
+    </a>
+    <a class="btn btn-primary btn-lg" href="#" role="button" >
+        Java
+    </a>
+    <a class="btn btn-primary btn-lg" href="#" role="button" >
+        Category3
+    </a><br>
+        </p>
+    </div>
+    {% else %}
+    <div style ="padding-top:5%;padding-bottom: 5% line-height: 10%" >
+        <p class="lead" align="center" >
+    <a class="btn btn-primary btn-lg" href="{{ url_for('category_python', id=-1) }}" role="button" >
+        Python
+    </a>
+    <a class="btn btn-primary btn-lg" href="#" role="button" >
+        Java
+    </a>
+    <a class="btn btn-primary btn-lg" href="#" role="button" >
+        Category3
+    </a><br>
+        </p>
+    </div>
+
+    {% endif %}
+
+</div>
+</div>
+</body>
+</html>

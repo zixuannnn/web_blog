@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
 from flask_mail import Mail, Message
 from web_config import app
+from datetime import datetime
 import json
 import OAuth as oa
 
@@ -19,21 +20,23 @@ class User(db.Model):
 
     __tablename__ = "user"
     id = db.Column(db.String(20), primary_key=True)
+    username = db.Column(db.String(70), nullable=False)
     fName = db.Column(db.String(50))
     mName = db.Column(db.String(50))
     lName = db.Column(db.String(59))
-    email = db.Column(db.String(70), nullable=False)
+    email = db.Column(db.String(70), nullable=False, unique=True)
     photo = db.Column(db.String(75))
     password_plain = db.Column(db.String(50), nullable=False)
     password_hash = db.Column(db.String(50), nullable=False)
-    register_date = db.Column(db.DateTime, default=db.func.current_timestamp())
+    registerDate = db.Column(db.DateTime, default=db.func.current_timestamp())
     lastLogin = db.Column(db.DateTime, default=db.func.current_timestamp())
     intro = db.Column(db.Text)
     profile = db.Column(db.Text)
 
-    def __init__(self, id, fName, mName,lName, email, photo, password_plain, password_hash, register_date, lastLogin,
-    	intro, profile):
+    def __init__(self, username, id, fName, mName,lName, email, photo, password_plain, password_hash,
+    	intro, profile, register_date, lastLogin):
         self.id = id
+        self.username = username
         self.fName = fName
         self.mName = mName
         self.lName = lName
@@ -41,10 +44,10 @@ class User(db.Model):
         self.photo = photo
         self.password_plain = password_plain
         self.password_hash = password_hash
-        self.register_date = register_date
-        self.lastLogin = lastLogin
         self.intro = intro
         self.profile = profile
+        self.registerDate = register_date
+        self.lastLogin = lastLogin
 
 # Second Table -> Posts
 class Posts(db.Model):
@@ -58,11 +61,10 @@ class Posts(db.Model):
 	view_times = db.Column(db.Integer, default=0)
 	thumbs_up = db.Column(db.BIGINT, default=0)
 
-	def __init__(self, post_id, author_id, title, post_date, content, view_times, thumbs_up):
+	def __init__(self, post_id, author_id, title, content, view_times, thumbs_up):
 		self.post_id = post_id
 		self.author_id = author_id
 		self.title = title
-		self.post_date = post_date
 		self.content = content
 		self.view_times = view_times
 		self.thumbs_up = thumbs_up
@@ -79,12 +81,11 @@ class Comment(db.Model):
     comment_title = db.Column(db.String(100))
     thumbs_up = db.Column(db.Integer, default=0)
 
-    def __init__(self, comment_id, post_id, comment_author_id, content, published_date, comment_title, thumbs_up):
+    def __init__(self, comment_id, post_id, comment_author_id, content, comment_title, thumbs_up):
         self.comment_id = comment_id
         self.post_id = post_id
         self.comment_author_id = comment_author_id
         self.content = content
-        self.published_date = published_date
         self.comment_title = comment_title
         self.thumbs_up = thumbs_up	
 
@@ -111,11 +112,11 @@ class PostCategory(db.Model):
         self.post_id = post_id
 
 # Sixth Table -> OAuth
-class  OAuth(db.Model):
+class  OAuth(UserMixin, db.Model):
 
     __tablename__ = "oauth"
     social_id = db.Column(db.String(100), primary_key=True)
-    email = db.Column(sb.String(70), nullable=False)
+    email = db.Column(db.String(70), nullable=False)
     id = db.Column(db.String(20), db.ForeignKey('user.id'))
     register_date = db.Column(db.DateTime, default=db.func.current_timestamp())
 
