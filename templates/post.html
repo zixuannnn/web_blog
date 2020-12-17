@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Post Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div>
+
+<style>
+    .pb-cmnt-container {
+        font-family: Lato;
+        margin-top: 20px;
+        height: 150px;
+        width: 120%;
+    }
+
+    .pb-cmnt-textarea {
+        resize: none;
+        padding: 20px;
+        height: 150px;
+        width: 120%;
+        border: 1px solid #F2F2F2;
+    }
+</style>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">Blog</a>
+            <ul class="navbar-nav">
+        </ul>
+        <ul class="navbar-nav ml-auto">
+    <li class="nav-item dropdown">
+    {% if login != -1 %}
+
+    <li class="nav-item">
+                <a class="nav-link" href="#">Dear {{ name }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('profile', id=id) }}">Profile</a>
+    </li>
+            <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('Login') }}">Login Here</a>
+    </li>
+     <li>
+        <a class="nav-link" href="{{ url_for('SignUp') }}">SignUp Here</a>
+    </li>
+    {% endif %}
+  </li>
+</ul>
+    </nav>
+
+    <div class="col-xs-1" align="center" style ="padding-top:5%;padding-bottom: 5% line-height: 10%">
+        <p class="lead" align="center" >
+        <h1>{{ post.title }}</h1>
+        <br>
+        <h4>Author: {{ author.username }}</h4>
+        <h4>Published on: {{ post.post_date }}</h4>
+         </p>
+    </div>
+
+    <br>
+
+    <div class="col-xs-1" align="center" style ="padding-top:5%;padding-bottom: 5% line-height: 10%">
+        <p class="lead" align="center" >
+        <p>{{ post.content }}</p>
+    </p>
+    </div>
+
+    <div class="col-xs-1" align="center" style ="padding-top:5%;padding-bottom: 5% line-height: 10%">
+    <div class="container pb-cmnt-container" align="center">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <form class="form-inline" method="post" action="{{ url_for('post_api.recent_posts', id=id, post_id=post.post_id) }}">
+                        <input type="text" class="form-control" name="comment_title" id="comment_title" placeholder="Enter your comment title.." style=" width: 120%;">
+                        <br>
+                        <textarea placeholder="Write your comment here!" class="pb-cmnt-textarea" name="comment" id="comment"></textarea>
+                        <br>
+                        <input class="btn btn-primary btn-lg" type="submit" value="Share">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+
+</div>
+</div>
+</body>
+</html>

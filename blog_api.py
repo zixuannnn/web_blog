@@ -4,6 +4,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 from flask_mail import Mail, Message
 from web_config import app
 from blog_table import db, User, Posts, Comment, Category, PostCategory, OAuth
+from post_api import post_api
 from datetime import datetime
 import json
 import OAuth as oa
@@ -12,6 +13,8 @@ import string
 
 lm = LoginManager(app)
 #lm.login_view = 'index'
+
+app.register_blueprint(post_api)
 
 def get_id(length):
     # Used to get a random user id
@@ -46,6 +49,9 @@ def Login():
 		password = request.form['pwd']
 		row = User.query.filter(User.email==email).first()
 		if row.password_plain == password:
+			date = datetime.now()
+			row.lastLogin = date
+			db.session.commit()
 			return redirect(url_for('AfterLogin', id=row.id))
 
 @app.route('/authorize/<provider>')
@@ -87,6 +93,27 @@ def oauth_callback(provider):
 	user_record = OAuth.query.filter_by(social_id=social_id).first()
 	return redirect(url_for('update_profile', id=user_record.id))
 
+@app.route('/signup', methods=['GET', 'POST'])
+def SignUp():
+	if request.method == 'GET':
+		return render_template('signup.html')
+	else:
+		username = request.form['un']
+		password = request.form['pwd']
+		email = request.form['email']
+		email_eligible = User.query.filter(User.email==email).first()
+		if email_eligible is not None:
+			return render_template('Error.html')
+		password_hash = hash(password)
+		id = get_id(20)
+		date = datetime.now()
+		user = User(id=id, username=username, fName=None, mName=None,lName=None, email=email, photo=None, password_plain=password, password_hash=str(password_hash),intro = None, profile=None, register_date=date, lastLogin=date)
+		db.session.add(user)
+		db.session.commit()
+		user_record = User.query.filter_by(id=id).first()
+		login_user(user_record, True)
+		return redirect(url_for('update_profile', id=id))
+
 @app.route('/update_profile/<id>', methods=['GET', 'POST'])
 def update_profile(id):
 	row = User.query.filter(User.id==id).first()
@@ -100,23 +127,33 @@ def update_profile(id):
 		db.session.commit()
 		return redirect(url_for('AfterLogin', id=id))
 
+@app.route('/profile_page/<id>', methods=['GET', 'POST'])
+def profile(id):
+	row = User.query.filter(User.id == id).first()
+	if request.method == 'GET':
+		return render_template('profile.html', id=id, row=row)
+	else:
+		username = request.form['username']
+		email = request.form['email']
+		lName = request.form['lName']
+		mName = request.form['mName']
+		fName = request.form['fName']
+		intro = request.form['intro']
+		row.username = username
+		row.email = email
+		row.lName = lName
+		row.mName = mName
+		row.fName = fName
+		row.intro = intro
+		db.session.commit()
+		return redirect(url_for('AfterLogin', id=id))
+
 @app.route('/category_python/<id>', methods=['GET'])
 def category_python(id):
 	data = Posts.query.order_by(Posts.post_id.desc()).limit(4).all()
 	return render_template('category_python.html', id=id, row1=data[0], row2=data[1], row3=data[2], row4=data[3])
 
-@app.route('/post1/<id>')
-def recent_posts(id, post_id):
-	post = Posts.query.filter(Posts.post_id==post_id).first()
-	return # render_template
 
-
-# @app.route('/signup', methods=['GET', 'POST'])
-# def signUp():
-#     if request.method == 'GET':
-#         return render_template('...')
-#     else:
-#         pass
 
 if __name__ == '__main__':
     db.create_all()

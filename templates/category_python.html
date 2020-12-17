@@ -46,28 +46,31 @@
     <div class="jumbotron text-center" style ="padding-top:0%;padding-bottom: 0% line-height: 0%" >
         <h1 class="display-3" align="center"style ="padding: 0px" >Python Category</h1>
 </div>
-    <a href="#">
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row1.post_id) }}" methods="get">
     <div class="container p-3 my-3 border">
         <h1>{{ row1.title }}</h1>
         <span class="text">{{ row1.content }}</span>
         <span class="text">Published on: {{ row1.post_date }}</span>
         <p style="text-align:right;">View: {{ row1.view_times }}</p>
     </div></a><br>
-    <a href="#">
+
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row2.post_id) }}" methods="get">
     <div class="container p-3 my-3 border">
         <h1>{{ row2.title }}</h1>
         <span class="text">{{ row2.content }}</span>
         <span class="text">Published on: {{ row2.post_date }}</span>
         <p style="text-align:right;">View: {{ row2.view_times }}</p>
     </div></a><br>
-    <a href="#">
+
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row3.post_id) }}" methods="get">
     <div class="container p-3 my-3 border">
         <h1>{{ row3.title }}</h1>
         <span class="text">{{ row3.content }}</span>
         <span class="text">Published on: {{ row3.post_date }}</span>
         <p style="text-align:right;">View: {{ row3.view_times }}</p>
     </div></a><br>
-    <a href="#">
+
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row4.post_id) }}" methods="get">
     <div class="container p-3 my-3 border">
         <h1>{{ row4.title }}</h1>
         <span class="text">{{ row4.content }}</span>

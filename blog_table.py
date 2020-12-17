@@ -16,7 +16,7 @@ lm.login_view = 'index'
 
 # Init tables using SQLAlchemy
 # First table -> User
-class User(db.Model):
+class User(UserMixin, db.Model):
 
     __tablename__ = "user"
     id = db.Column(db.String(20), primary_key=True)
@@ -81,13 +81,13 @@ class Comment(db.Model):
     comment_title = db.Column(db.String(100))
     thumbs_up = db.Column(db.Integer, default=0)
 
-    def __init__(self, comment_id, post_id, comment_author_id, content, comment_title, thumbs_up):
-        self.comment_id = comment_id
+    def __init__(self, post_id, comment_author_id, content, comment_title, thumbs_up, published_date):
         self.post_id = post_id
         self.comment_author_id = comment_author_id
         self.content = content
         self.comment_title = comment_title
-        self.thumbs_up = thumbs_up	
+        self.thumbs_up = thumbs_up
+        self.published_date = published_date
 
 # Forth Table -> Category
 class Category(db.Model):
