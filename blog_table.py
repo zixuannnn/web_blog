@@ -61,8 +61,7 @@ class Posts(db.Model):
 	view_times = db.Column(db.Integer, default=0)
 	thumbs_up = db.Column(db.BIGINT, default=0)
 
-	def __init__(self, post_id, author_id, title, content, view_times, thumbs_up):
-		self.post_id = post_id
+	def __init__(self, author_id, title, content, view_times, thumbs_up):
 		self.author_id = author_id
 		self.title = title
 		self.content = content

@@ -25,6 +25,8 @@
     }
 </style>
 
+
+
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <a class="navbar-brand" href="#">Blog</a>
             <ul class="navbar-nav">
@@ -34,7 +36,7 @@
     {% if login != -1 %}
 
     <li class="nav-item">
-                <a class="nav-link" href="#">Dear {{ name }}</a>
+                <span class="nav-link" id="name" href="#">Dear {{ name }}</span>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ url_for('profile', id=id) }}">Profile</a>
@@ -70,6 +72,78 @@
         <p>{{ post.content }}</p>
     </p>
     </div>
+
+    {% if comment1 != null %}
+    <div class="container p-3 my-3">
+        <h5 style="color:#808080">{{ comment1.username }}</h5>
+        <p style="color:#808080" class="text">Published on: {{ comment1.published_date }}
+        <span style="float:right;color:#808080">Likes: {{ comment1.thumbs_up }}</span>
+        </p>
+        <h5>{{ comment1.comment_title }}</h5>
+        <h6>{{ comment1.content }}</h6>
+    </div>
+
+    {% else %}
+    <div class="container p-3 my-3">
+        <h5>Comment Empty</h5>
+    </div>
+
+    {% endif %}
+
+
+    {% if comment2 != null %}
+
+    <div class="container p-3 my-3">
+        <h5 style="color:#808080">{{ comment2.username }}</h5>
+        <p style="color:#808080" class="text">Published on: {{ comment2.published_date }}
+        <span style="float:right;color:#808080">Likes: {{ comment2.thumbs_up }}</span>
+        </p>
+        <h5>{{ comment2.comment_title }}</h5>
+        <h6>{{ comment2.content }}</h6>
+    </div>
+
+    {% else %}
+    <div class="container p-3 my-3">
+        <h5>Comment Empty</h5>
+    </div>
+
+    {% endif %}
+
+     {% if comment3 != null %}
+
+    <div class="container p-3 my-3">
+        <h5 style="color:#808080">{{ comment3.username }}</h5>
+        <p style="color:#808080" class="text">Published on: {{ comment3.published_date }}
+        <span style="float:right;color:#808080">Likes: {{ comment3.thumbs_up }}</span>
+        </p>
+        <h5>{{ comment3.comment_title }}</h5>
+        <h6>{{ comment3.content }}</h6>
+    </div>
+
+    {% else %}
+    <div class="container p-3 my-3">
+        <h5>Comment Empty</h5>
+    </div>
+
+    {% endif %}
+
+    {% if comment4 != null %}
+
+    <div class="container p-3 my-3">
+        <h5 style="color:#808080">{{ comment4.username }}</h5>
+        <p style="color:#808080" class="text">Published on: {{ comment4.published_date }}
+        <span style="float:right;color:#808080">Likes: {{ comment4.thumbs_up }}</span>
+        </p>
+        <h5>{{ comment4.comment_title }}</h5>
+        <h6>{{ comment4.content }}</h6>
+    </div>
+
+    {% else %}
+    <div class="container p-3 my-3">
+        <h5>Comment Empty</h5>
+    </div>
+
+    {% endif %}
 
     <div class="col-xs-1" align="center" style ="padding-top:5%;padding-bottom: 5% line-height: 10%">
     <div class="container pb-cmnt-container" align="center">
