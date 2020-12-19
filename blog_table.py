@@ -52,21 +52,22 @@ class User(UserMixin, db.Model):
 # Second Table -> Posts
 class Posts(db.Model):
 
-	__tablename__ = "posts"
-	post_id = db.Column(db.BIGINT, primary_key=True, autoincrement=True)
-	author_id = db.Column(db.String(20), db.ForeignKey('user.id'), nullable=False)
-	title = db.Column(db.String(100), nullable=False)
-	post_date = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
-	content = db.Column(db.Text)
-	view_times = db.Column(db.Integer, default=0)
-	thumbs_up = db.Column(db.BIGINT, default=0)
+    __tablename__ = "posts"
+    post_id = db.Column(db.BIGINT, primary_key=True, autoincrement=True)
+    author_id = db.Column(db.String(20), db.ForeignKey('user.id'), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    post_date = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
+    content = db.Column(db.Text)
+    view_times = db.Column(db.Integer, default=0)
+    thumbs_up = db.Column(db.BIGINT, default=0)
 
-	def __init__(self, author_id, title, content, view_times, thumbs_up):
-		self.author_id = author_id
-		self.title = title
-		self.content = content
-		self.view_times = view_times
-		self.thumbs_up = thumbs_up
+    def __init__(self, author_id, title, content, view_times, thumbs_up, post_date):
+        self.post_date = post_date
+        self.author_id = author_id
+        self.title = title
+        self.content = content
+        self.view_times = view_times
+        self.thumbs_up = thumbs_up
 
 # Third Table -> PostComment
 class Comment(db.Model):

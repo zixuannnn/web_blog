@@ -33,7 +33,7 @@ def logout():
 
 @app.route('/', methods=['GET'])
 def Main_Page():
-	return render_template('main_page.html', login=False)
+	return render_template('main_page.html', login=False, id=-1)
 
 @app.route('/main/<id>', methods=['GET'])
 def AfterLogin(id):
@@ -48,11 +48,12 @@ def Login():
 		email = request.form['email']
 		password = request.form['pwd']
 		row = User.query.filter(User.email==email).first()
+		last_login_date = row.lastLogin
 		if row.password_plain == password:
 			date = datetime.now()
 			row.lastLogin = date
 			db.session.commit()
-			return redirect(url_for('AfterLogin', id=row.id))
+			return render_template('last_login.html', id=row.id, date=last_login_date)
 
 @app.route('/authorize/<provider>')
 def oauth_login(provider):
@@ -150,8 +151,45 @@ def profile(id):
 
 @app.route('/category_python/<id>', methods=['GET'])
 def category_python(id):
-	data = Posts.query.order_by(Posts.post_id.desc()).limit(4).all()
-	return render_template('category_python.html', id=id, row1=data[0], row2=data[1], row3=data[2], row4=data[3])
+	if id == "-1":
+		id = -1
+	else:
+		user = User.query.filter(User.id == id).first()
+	python_list = Posts.query.join(PostCategory, PostCategory.post_id==Posts.post_id). \
+		add_columns(Posts.post_id, Posts.view_times, Posts.post_date, Posts.author_id, Posts.content, Posts.title, Posts.thumbs_up). \
+		filter(PostCategory.category_id==1).order_by(Posts.post_date.desc()).limit(4).all()
+	new_python_list = [-1, -1, -1, -1]
+	for c in range(len(python_list)):
+		new_python_list[c] = python_list[c]
+	return render_template('category_python.html', id=id, name=user.username, row1=new_python_list[0], row2=new_python_list[1], row3=new_python_list[2], row4=new_python_list[3])
+
+@app.route('/category_java/<id>', methods=['GET'])
+def category_java(id):
+	if id == "-1":
+		id = -1
+	else:
+		user = User.query.filter(User.id == id).first()
+	java_list = Posts.query.join(PostCategory, PostCategory.post_id==Posts.post_id). \
+		add_columns(Posts.post_id, Posts.view_times, Posts.post_date, Posts.author_id, Posts.content, Posts.title, Posts.thumbs_up). \
+		filter(PostCategory.category_id==2).order_by(Posts.post_date.desc()).limit(4).all()
+	new_java_list = [-1, -1, -1, -1]
+	for c in range(len(java_list)):
+		new_java_list[c] = java_list[c]
+	return render_template('category_java.html', id=id, name=user.username, row1=new_java_list[0], row2=new_java_list[1], row3=new_java_list[2], row4=new_java_list[3])
+
+@app.route('/category_mysql/<id>', methods=['GET'])
+def category_mysql(id):
+	if id == "-1":
+		id = -1
+	else:
+		user = User.query.filter(User.id == id).first()
+	mysql_list = Posts.query.join(PostCategory, PostCategory.post_id==Posts.post_id). \
+		add_columns(Posts.post_id, Posts.view_times, Posts.post_date, Posts.author_id, Posts.content, Posts.title, Posts.thumbs_up). \
+		filter(PostCategory.category_id==3).order_by(Posts.post_date.desc()).limit(4).all()
+	new_mysql_list = [-1, -1, -1, -1]
+	for c in range(len(mysql_list)):
+		new_mysql_list[c] = mysql_list[c]
+	return render_template('category_mysql.html', id=id, name=user.username, row1=new_mysql_list[0], row2=new_mysql_list[1], row3=new_mysql_list[2], row4=new_mysql_list[3])
 
 
 

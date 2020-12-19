@@ -13,7 +13,9 @@
             <ul class="navbar-nav">
         </ul>
         <ul class="navbar-nav ml-auto">
-    <li class="nav-item dropdown">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('post_api.new_post', id=id) }}">Start a new Post!</a>
+        </li>
     {% if login == True %}
 
     <li class="nav-item">
@@ -33,8 +35,7 @@
         <a class="nav-link" href="{{ url_for('SignUp') }}">SignUp Here</a>
     </li>
     {% endif %}
-  </li>
-</ul>
+    </ul>
     </nav>
 
 
@@ -48,11 +49,11 @@
     <a class="btn btn-primary btn-lg" href="{{ url_for('category_python', id=id) }}" role="button" >
         Python
     </a>
-    <a class="btn btn-primary btn-lg" href="#" role="button" >
+    <a class="btn btn-primary btn-lg" href="{{ url_for('category_java', id=id) }}" role="button" >
         Java
     </a>
-    <a class="btn btn-primary btn-lg" href="#" role="button" >
-        Category3
+    <a class="btn btn-primary btn-lg" href="{{ url_for('category_mysql', id=id) }}" role="button" >
+        MySQL
     </a><br>
         </p>
     </div>
@@ -70,12 +71,8 @@
     </a><br>
         </p>
     </div>
-
     {% endif %}
 
-    <a class="btn btn-primary btn-lg" href="{{ url_for('post_api.new_post', id=-1) }}" role="button" >
-        Start a new Post!
-    </a><br>
 
 </div>
 </div>

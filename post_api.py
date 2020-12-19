@@ -22,7 +22,7 @@ def recent_posts(id, post_id):
     comment_list = Comment.query.join(User, User.id==Comment.comment_author_id).\
         add_columns(User.username, Comment.content, Comment.thumbs_up, Comment.published_date, Comment.comment_title).\
         filter(Comment.post_id==post_id).order_by(Comment.published_date.desc()).limit(4).all()
-    new_comment_list = [None, None, None, None]
+    new_comment_list = [-1, -1, -1, -1]
     for c in range(len(comment_list)):
         new_comment_list[c] = comment_list[c]
 
@@ -33,7 +33,7 @@ def recent_posts(id, post_id):
                 return render_template('post.html', id=id, name=user.username, post=post, author=author, comment1=new_comment_list[0], comment2=new_comment_list[1],\
                                        comment3=new_comment_list[2],comment4=new_comment_list[3], login=1)
         else:
-            return render_template('post.html', id=id, post=post, author=author, comment1=new_comment_list[0], comment2=new_comment_list[1],\
+            return render_template('post.html', id=-1, post=post, author=author, comment1=new_comment_list[0], comment2=new_comment_list[1],\
                                        comment3=new_comment_list[2],comment4=new_comment_list[3], login=-1)
     else:
         if id != "-1":
@@ -51,34 +51,33 @@ def recent_posts(id, post_id):
 def new_post(id):
     if request.method == 'GET':
         if id == "-1":
-            return render_template('new_post.html', login=-1)
+            return render_template('new_post.html', login=-1, id=-1)
         else:
-            return render_template('new_post.html', login=1)
+            user = User.query.filter(User.id == id).first()
+            return render_template('new_post.html', login=1, id=id, name=user.username)
     else:
         if id != "-1":
             article = request.form['article']
             title = request.form['article_title']
-            # date = datetime.now()
-            # post_input = Posts(author_id=id, title=title, content=article, view_times=0, thumbs_up=0)
-            # db.session.add(post_input)
-            # db.session.commit()
-            post_id = Posts.query(func.max(User.numLogins)).scalar()
+            date = datetime.now()
+            post_input = Posts(author_id=id, title=title, content=article, view_times=0, thumbs_up=0, post_date=date)
+            db.session.add(post_input)
+            db.session.commit()
+            post_id = db.session.query(func.max(Posts.post_id)).scalar()
+            print(post_id)
             if request.form.get('python'):
-                print(1)
-                # category = PostCategory(post_id=post_id, category_id=1)
-                # db.session.add(post_input)
-                # db.session.commit()
+                category = PostCategory(post_id=post_id, category_id=1)
+                db.session.add(category)
+                db.session.commit()
             if request.form.get('java'):
-                print(2)
-                # category = PostCategory(post_id=post_id, category_id=2)
-                # db.session.add(post_input)
-                # db.session.commit()
-            if request.form.get('category3'):
-                print(3)
-                # category = PostCategory(post_id=post_id, category_id=3)
-                # db.session.add(post_input)
-                # db.session.commit()
-            return redirect(url_for('Main_Page'))
+                category = PostCategory(post_id=post_id, category_id=2)
+                db.session.add(category)
+                db.session.commit()
+            if request.form.get('mysql'):
+                category = PostCategory(post_id=post_id, category_id=3)
+                db.session.add(category)
+                db.session.commit()
+            return redirect(url_for('AfterLogin', id=id))
         else:
             return render_template('error_login_prompt.html')
 

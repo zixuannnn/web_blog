@@ -41,7 +41,7 @@
 
 
     <div class="jumbotron text-center" style ="padding-top:0%;padding-bottom: 0% line-height: 0%" >
-        <h1 class="display-3" align="center"style ="padding: 0px" >Python</h1>
+        <h1 class="display-3" align="center"style ="padding: 0px" >MySQL</h1>
     </div>
     {% if row1 != -1 %}
     <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row1.post_id) }}" methods="get">
@@ -98,7 +98,7 @@
         <h4 style="color:#808080;">Empty, no any post here...</h4>
     </div>
     {% endif %}
-    
+
 	{% if id != -1 %}
     <form method="get" action="{{ url_for('AfterLogin', id=id) }}">
     	<input class="btn btn-primary btn-lg" type="submit" value="Go back to Main Page">

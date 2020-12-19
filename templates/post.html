@@ -73,7 +73,7 @@
     </p>
     </div>
 
-    {% if comment1 != null %}
+    {% if comment1 != -1 %}
     <div class="container p-3 my-3">
         <h5 style="color:#808080">{{ comment1.username }}</h5>
         <p style="color:#808080" class="text">Published on: {{ comment1.published_date }}
@@ -91,7 +91,7 @@
     {% endif %}
 
 
-    {% if comment2 != null %}
+    {% if comment2 != -1 %}
 
     <div class="container p-3 my-3">
         <h5 style="color:#808080">{{ comment2.username }}</h5>
@@ -109,7 +109,7 @@
 
     {% endif %}
 
-     {% if comment3 != null %}
+     {% if comment3 != -1 %}
 
     <div class="container p-3 my-3">
         <h5 style="color:#808080">{{ comment3.username }}</h5>
@@ -127,7 +127,7 @@
 
     {% endif %}
 
-    {% if comment4 != null %}
+    {% if comment4 != -1 %}
 
     <div class="container p-3 my-3">
         <h5 style="color:#808080">{{ comment4.username }}</h5>
