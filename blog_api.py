@@ -1,7 +1,9 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
 from flask_mail import Mail, Message
+from werkzeug.utils import secure_filename
+
 from web_config import app
 from blog_table import db, User, Posts, Comment, Category, PostCategory, OAuth
 from post_api import post_api
@@ -10,17 +12,23 @@ import json
 import OAuth as oa
 import random
 import string
+import os
 
 lm = LoginManager(app)
 #lm.login_view = 'index'
 
 app.register_blueprint(post_api)
 
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
+
 def get_id(length):
     # Used to get a random user id
     letters = string.ascii_letters+string.digits
     random_id = ''.join(random.choice(letters) for i in range(length))
     return random_id
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @lm.user_loader
 def load_user(id):
@@ -108,7 +116,7 @@ def SignUp():
 		password_hash = hash(password)
 		id = get_id(20)
 		date = datetime.now()
-		user = User(id=id, username=username, fName=None, mName=None,lName=None, email=email, photo=None, password_plain=password, password_hash=str(password_hash),intro = None, profile=None, register_date=date, lastLogin=date)
+		user = User(id=id, username=username, fName=None, mName=None,lName=None, email=email, photo="default_photo.jpg", password_plain=password, password_hash=str(password_hash),intro = None, profile=None, register_date=date, lastLogin=date)
 		db.session.add(user)
 		db.session.commit()
 		user_record = User.query.filter_by(id=id).first()
@@ -132,7 +140,10 @@ def update_profile(id):
 def profile(id):
 	row = User.query.filter(User.id == id).first()
 	if request.method == 'GET':
-		return render_template('profile.html', id=id, row=row)
+		if row:
+			return render_template('profile.html', id=id, filename=row.photo, row=row)
+		else:
+			return render_template('error_login_prompt.html')
 	else:
 		username = request.form['username']
 		email = request.form['email']
@@ -140,6 +151,19 @@ def profile(id):
 		mName = request.form['mName']
 		fName = request.form['fName']
 		intro = request.form['intro']
+
+		file = request.files.get("files")
+		if file:
+			if not allowed_file(file.filename):
+				print("check the type of the uploaded file")
+				return render_template('Error.html')
+			base_path = os.path.abspath(os.path.dirname(__file__))
+			filename = row.id + "." +file.filename.split(".")[1];
+			up_path = os.path.join(base_path, "static", filename)
+			file.save(up_path)
+			row.photo = filename
+			db.session.commit()
+
 		row.username = username
 		row.email = email
 		row.lName = lName
@@ -147,7 +171,7 @@ def profile(id):
 		row.fName = fName
 		row.intro = intro
 		db.session.commit()
-		return redirect(url_for('AfterLogin', id=id))
+		return redirect(url_for('profile', id=id))
 
 @app.route('/category_python/<id>', methods=['GET'])
 def category_python(id):

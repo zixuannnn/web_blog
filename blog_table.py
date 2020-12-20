@@ -34,7 +34,7 @@ class User(UserMixin, db.Model):
     profile = db.Column(db.Text)
 
     def __init__(self, username, id, fName, mName,lName, email, photo, password_plain, password_hash,
-    	intro, profile, register_date, lastLogin):
+    	intro, register_date, lastLogin, profile):
         self.id = id
         self.username = username
         self.fName = fName

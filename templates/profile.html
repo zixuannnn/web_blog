@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>Blog Update Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.6/css/fileinput.min.css">
+    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.6/js/fileinput.min.js"></script>
 </head>
 <body>
 
@@ -16,89 +18,57 @@
         </li>
     </ul>
 </nav>
+
 <div class="container"><br>
-<form method="post" action="{{ url_for('update_profile', id=id) }}">
-    {% if row == null %}
-    <div class="from-group">
-        <label for="email">Email: </label>
-        <input type="text" class="form-control" name="email" id="email" placeholder="Enter Email.."
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+    {% set file_name = filename %}
+    <img src="{{ url_for('static', filename=file_name ) }}">
+    <form role="form" action="{{ url_for('profile', id=id) }}" method="post" enctype="multipart/form-data">
+        <div class="from-group">
+            <input name="files" type="file"/>
+        </div>
 
-    </div>
-    <div class="from-group">
-        <label for="username">Username: </label>
-        <input type="text" class="form-control" name="username" id="username" placeholder="Enter Username.."
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        <div class="from-group">
+            <label for="email">Email: </label>
+            <input type="text" class="form-control" name="email" id="email" placeholder="{{ row.email }}"
+            required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        </div>
 
-    </div>
+        <div class="from-group">
+            <label for="username">Username: </label>
+            <input type="text" class="form-control" name="username" id="username" placeholder="{{ row.username }}"
+            required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        </div>
 
-    <div class="from-group">
-        <label for="username">Last Name: </label>
-        <input type="text" class="form-control" name="username" id="lName" placeholder="Enter Last Name.."
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
-    </div>
-    <div class="from-group">
-        <label for="username">Middle Name: </label>
-        <input type="text" class="form-control" name="username" id="mName" placeholder="Enter Middle Name.."
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        <div class="from-group">
+            <label for="username">Last Name: </label>
+            <input type="text" class="form-control" name="lName" id="lName" placeholder="{{ row.lName }}"
+            required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        </div>
 
-    </div>
-    <div class="from-group">
-        <label for="username">First Name: </label>
-        <input type="text" class="form-control" name="username" id="fName" placeholder="Enter First Name.."
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        <div class="from-group">
+            <label for="username">Middle Name: </label>
+            <input type="text" class="form-control" name="mName" id="mName" placeholder="{{ row.mName }}"
+            required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        </div>
 
-    </div>
-    <div class="from-group">
-        <label for="username">Your quick self-introduction: </label>
-        <input type="text" class="form-control" name="username" id="intro" placeholder="Enter a quick introduction here about yourself.."
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        <div class="from-group">
+            <label for="username">First Name: </label>
+            <input type="text" class="form-control" name="fName" id="fName" placeholder="{{ row.fName }}"
+            required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        </div>
 
-    </div>
-    {% else %}
-    <div class="from-group">
-        <label for="email">Email: </label>
-        <input type="text" class="form-control" name="email" id="email" placeholder="{{ row.email }}"
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        <div class="from-group">
+            <label for="username">Your quick self-introduction: </label>
+            <input type="text" class="form-control" name="intro" id="intro" placeholder="{{ row.intro }}"
+            required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
+        </div>
+        <br>
+        <input class="btn btn-primary btn-lg" type="submit" value="Update">
+    </form>
 
-    </div>
-    <div class="from-group">
-        <label for="username">Username: </label>
-        <input type="text" class="form-control" name="username" id="username" placeholder="{{ row.username }}"
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
-
-    </div>
-    <div class="from-group">
-        <label for="username">Last Name: </label>
-        <input type="text" class="form-control" name="username" id="lName" placeholder="{{ row.lName }}"
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
-    </div>
-    <div class="from-group">
-        <label for="username">Middle Name: </label>
-        <input type="text" class="form-control" name="username" id="mName" placeholder="{{ row.mName }}"
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
-
-    </div>
-    <div class="from-group">
-        <label for="username">First Name: </label>
-        <input type="text" class="form-control" name="username" id="fName" placeholder="{{ row.fName }}"
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
-
-    </div>
-    <div class="from-group">
-        <label for="username">Your quick self-introduction: </label>
-        <input type="text" class="form-control" name="username" id="intro" placeholder="{{ row.intro }}"
-        required="" oninvalid="this.setCustomValidity('Please enter all required info')"/>
-
-    </div>
-
-    {% endif %}
-    <br>
-    <input class="btn btn-primary btn-lg" type="submit" value="Update">
-</form>
-<form method="get" action="{{ url_for('AfterLogin', id=id) }}">
-    <input class="btn btn-primary btn-lg" type="submit" value="Skip">
-</form>
+    <form method="get" action="{{ url_for('AfterLogin', id=id) }}">
+        <input class="btn btn-primary btn-lg" type="submit" value="Skip">
+    </form>
 </div>
 </body>
 </html>
