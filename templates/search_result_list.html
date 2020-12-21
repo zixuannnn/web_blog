@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+	<style type="text/css">
+		.text {
+		  display: block;
+		  width: 1000px;
+		  overflow: hidden;
+		  white-space: nowrap;
+		  text-overflow: ellipsis;
+		}
+	</style>
+    <meta charset="UTF-8">
+    <title>Blog Search Result</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">Blog</a>
+            <ul class="navbar-nav">
+        </ul>
+        <ul class="navbar-nav ml-auto">
+    <li class="nav-item dropdown">
+    {% if id != -1 %}
+    <li class="nav-item">
+                <a class="nav-link" href="#">Dear {{ name }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('Login') }}">Login Here</a>
+    </li>
+    {% endif %}
+  </li>
+</ul>
+    </nav>
+
+
+    <div class="jumbotron text-center" style ="padding-top:0%;padding-bottom: 0% line-height: 0%" >
+        <h1 class="display-3" align="center"style ="padding: 0px" >Searching Result</h1>
+    </div>
+    {% if row1 != -1 %}
+    <a href="#" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row1.username }}</h1>
+        <span class="text">{{ row1.intro }}</span>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any result here...</h4>
+    </div>
+    {% endif %}
+
+    {% if row2 != -1 %}
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row2.post_id) }}" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row2.username }}</h1>
+        <span class="text">{{ row2.intro }}</span>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any result here...</h4>
+    </div>
+    {% endif %}
+
+    {% if row3 != -1 %}
+    <a href="#" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row3.username }}</h1>
+        <span class="text">{{ row3.intro }}</span>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any result here...</h4>
+    </div>
+    {% endif %}
+
+    {% if row4 != -1 %}
+    <a href="#" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row4.username }}</h1>
+        <span class="text">{{ row4.intro }}</span>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any result here...</h4>
+    </div>
+    {% endif %}
+
+	{% if id != -1 %}
+    <form method="get" action="{{ url_for('AfterLogin', id=id) }}">
+    	<input class="btn btn-primary btn-lg" type="submit" value="Go back to Main Page">
+    </form>
+    {% else %}
+    <form method="get" action="{{ url_for('Main_Page') }}">
+    	<input class="btn btn-primary btn-lg" type="submit" value="Go back to Main Page">
+    </form>
+    {% endif %}
+
+</div>
+</div>
+</body>
+</html>

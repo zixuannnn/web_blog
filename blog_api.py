@@ -1,5 +1,3 @@
-import imghdr
-
 from flask import Flask, request, render_template, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
@@ -9,6 +7,7 @@ from werkzeug.utils import secure_filename
 from web_config import app
 from blog_table import db, User, Posts, Comment, Category, PostCategory, OAuth
 from post_api import post_api
+from user_api import user_api
 from datetime import datetime
 import json
 import OAuth as oa
@@ -20,6 +19,7 @@ lm = LoginManager(app)
 #lm.login_view = 'index'
 
 app.register_blueprint(post_api)
+app.register_blueprint(user_api)
 
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
 

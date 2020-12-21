@@ -16,6 +16,9 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('post_api.new_post', id=id) }}">Start a new Post!</a>
         </li>
+             <form method="post" action="{{ url_for('user_api.search_user', id=id) }}">
+            <input type="text" name="keyword" placeholder="Search User..">
+             </form>
     {% if login == True %}
 
     <li class="nav-item">
