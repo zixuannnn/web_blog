@@ -1,3 +1,5 @@
+import imghdr
+
 from flask import Flask, request, render_template, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
@@ -151,25 +153,31 @@ def profile(id):
 		mName = request.form['mName']
 		fName = request.form['fName']
 		intro = request.form['intro']
-
 		file = request.files.get("files")
 		if file:
 			if not allowed_file(file.filename):
 				print("check the type of the uploaded file")
-				return render_template('Error.html')
+				return render_template('Error.html', info="check the type of the uploaded file")
 			base_path = os.path.abspath(os.path.dirname(__file__))
-			filename = row.id + "." +file.filename.split(".")[1];
+			filename = row.id + "." + file.filename.split(".")[1];
 			up_path = os.path.join(base_path, "static", filename)
+			# if os.path.exists(up_path):
+			# 	os.remove(up_path)
 			file.save(up_path)
 			row.photo = filename
 			db.session.commit()
-
-		row.username = username
-		row.email = email
-		row.lName = lName
-		row.mName = mName
-		row.fName = fName
-		row.intro = intro
+		if username != "":
+			row.username = username
+		if email != "":
+			row.email = email
+		if lName != "":
+			row.lName = lName
+		if mName != "":
+			row.mName = mName
+		if fName != "":
+			row.fName = fName
+		if intro != "":
+			row.intro = intro
 		db.session.commit()
 		return redirect(url_for('profile', id=id))
 
