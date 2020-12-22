@@ -39,6 +39,8 @@ def recent_posts(id, post_id):
         if id != "-1":
             comment = request.form['comment']
             title = request.form['comment_title']
+            if comment == "" or title == "":
+                return render_template('Error.html', info="Please fill out your title or comment content")
             date = datetime.now()
             comment_input = Comment(post_id=post_id, comment_author_id=id, content=comment, comment_title=title, thumbs_up=0, published_date=date)
             db.session.add(comment_input)

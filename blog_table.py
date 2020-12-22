@@ -32,9 +32,11 @@ class User(UserMixin, db.Model):
     lastLogin = db.Column(db.DateTime, default=db.func.current_timestamp())
     intro = db.Column(db.Text)
     profile = db.Column(db.Text)
+    following = db.Column(db.Integer)
+    follower = db.Column(db.Integer)
 
     def __init__(self, username, id, fName, mName,lName, email, photo, password_plain, password_hash,
-    	intro, register_date, lastLogin, profile):
+    	intro, register_date, lastLogin, profile, following, follower):
         self.id = id
         self.username = username
         self.fName = fName
@@ -48,6 +50,8 @@ class User(UserMixin, db.Model):
         self.profile = profile
         self.registerDate = register_date
         self.lastLogin = lastLogin
+        self.following = following
+        self.follower = follower
 
 # Second Table -> Posts
 class Posts(db.Model):
@@ -125,6 +129,18 @@ class  OAuth(UserMixin, db.Model):
         self.email = email
         self.id = id
         self.register_date = register_date
+
+# Seventh Table -> Follow
+class Follow(db.Model):
+
+    __tablename__ = "follow"
+    following_id = db.Column(db.String(20), db.ForeignKey('user.id'), primary_key=True)
+    follower_id = db.Column(db.String(20), db.ForeignKey('user.id'), primary_key=True)
+
+    def __init__(self, following_id, follower_id):
+        self.following_id = following_id
+        self.follower_id = follower_id
+
 
 
 

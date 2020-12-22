@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.6/css/fileinput.min.css">
+    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.6/js/fileinput.min.js"></script>
+    <style>
+        .c1{
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        img{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <a class="navbar-brand" href="{{ url_for('AfterLogin', id=id) }}">Blog</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+        <a class="nav-link" href="#">Start your idea here</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="jumbotron"><br>
+
+    <div class="c1">
+        {% set file_name = filename %}
+        <img src="{{ url_for('static', filename=file_name ) }}" alt="">
+<!--         <img src="{{ path }}" alt="" align="middle">-->
+    </div>
+    <br>
+    <a class="lead">{{ following.username }}</a><br>
+    <a href="#">Following: {{ following.following }}</a>
+    <a href="#">Follower: {{ following.follower }}</a><br>
+    <a class="lead">{{ following.email }}</a><br>
+    <a class="lead">{{ following.intro }}</a><br>
+    <br>
+
+    <form method="post" action="{{ url_for('user_api.follow_user', id=id, following_id=following.id) }}">
+        <input class="btn btn-primary btn-lg" type="submit" value="Follow">
+    </form>
+</div>
+
+<div>
+    {% if row1 != -1 %}
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row1.post_id) }}" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row1.title }}</h1>
+        <span class="text">{{ row1.content }}</span>
+        <span class="text">Published on: {{ row1.post_date }}</span>
+        <p style="text-align:right;color:#808080">View: {{ row1.view_times }}</p>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any post here...</h4>
+    </div>
+    {% endif %}
+
+    {% if row2 != -1 %}
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row2.post_id) }}" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row2.title }}</h1>
+        <span class="text">{{ row2.content }}</span>
+        <span class="text">Published on: {{ row2.post_date }}</span>
+        <p style="text-align:right;color:#808080">View: {{ row2.view_times }}</p>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any post here...</h4>
+    </div>
+    {% endif %}
+
+    {% if row3 != -1 %}
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row3.post_id) }}" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row3.title }}</h1>
+        <span class="text">{{ row3.content }}</span>
+        <span class="text">Published on: {{ row3.post_date }}</span>
+        <p style="text-align:right;color:#808080">View: {{ row3.view_times }}</p>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any post here...</h4>
+    </div>
+    {% endif %}
+
+    {% if row4 != -1 %}
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row4.post_id) }}" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ row4.title }}</h1>
+        <span class="text">{{ row4.content }}</span>
+        <span class="text">Published on: {{ row4.post_date }}</span>
+        <p style="text-align:right;color:#808080">View: {{ row4.view_times }}</p>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any post here...</h4>
+    </div>
+    {% endif %}
+
+</div>
+
+</div>
+</body>
+</html>

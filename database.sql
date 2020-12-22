@@ -1,6 +1,4 @@
-drop schema blog;
-create schema if not exists blog;
-use blog;
+use `heroku_a81423c4179f179`;
 
 create table if not exists user(
 id varchar(20) primary key,
@@ -61,4 +59,25 @@ id varchar(20),
 register_date datetime default CURRENT_TIMESTAMP(),
 foreign key(id) references user(id)
 );
+
+create table if not exists follow(
+follower_id varchar(20),
+following_id varchar(20),
+primary key(follower_id, following_id),
+foreign key(follower_id) references User(id),
+foreign key(following_id) references User(id)
+);
+
+create table if not exists follow(
+follower_id varchar(20),
+following_id varchar(20),
+primary key(follower_id, following_id),
+foreign key(follower_id) references User(id),
+foreign key(following_id) references User(id)
+);
+
+-- alter table user add (`following` int, `follower` int);
+-- update user set `following` = 0 where id = 'rrf8JdnkC31HOkwxBTeT';
+-- update user set `follower` = 0 where id = 'rrf8JdnkC31HOkwxBTeT';
+-- update user set intro = "No any intro here..." where id = 'rrf8JdnkC31HOkwxBTeT';
 

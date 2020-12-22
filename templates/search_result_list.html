@@ -39,12 +39,13 @@
 </ul>
     </nav>
 
-
     <div class="jumbotron text-center" style ="padding-top:0%;padding-bottom: 0% line-height: 0%" >
         <h1 class="display-3" align="center"style ="padding: 0px" >Searching Result</h1>
     </div>
+
+    <h4 style="color:#808080;" align="center">User Search Result</h4>
     {% if row1 != -1 %}
-    <a href="#" methods="get">
+    <a href="{{ url_for('user_api.follow_user', id=id, following_id=row1.id) }}" methods="get">
     <div class="container p-3 my-3 border">
         <h1>{{ row1.username }}</h1>
         <span class="text">{{ row1.intro }}</span>
@@ -56,7 +57,7 @@
     {% endif %}
 
     {% if row2 != -1 %}
-    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=row2.post_id) }}" methods="get">
+    <a href="{{ url_for('user_api.follow_user', id=id, following_id=row2.id) }}" methods="get">
     <div class="container p-3 my-3 border">
         <h1>{{ row2.username }}</h1>
         <span class="text">{{ row2.intro }}</span>
@@ -68,7 +69,7 @@
     {% endif %}
 
     {% if row3 != -1 %}
-    <a href="#" methods="get">
+    <a href="{{ url_for('user_api.follow_user', id=id, following_id=row3.id) }}" methods="get">
     <div class="container p-3 my-3 border">
         <h1>{{ row3.username }}</h1>
         <span class="text">{{ row3.intro }}</span>
@@ -80,7 +81,7 @@
     {% endif %}
 
     {% if row4 != -1 %}
-    <a href="#" methods="get">
+    <a href="{{ url_for('user_api.follow_user', id=id, following_id=row4.id) }}" methods="get">
     <div class="container p-3 my-3 border">
         <h1>{{ row4.username }}</h1>
         <span class="text">{{ row4.intro }}</span>
@@ -90,6 +91,64 @@
         <h4 style="color:#808080;">Empty, no any result here...</h4>
     </div>
     {% endif %}
+
+    <h4 style="color:#808080;" align="center">Posts Resarch List</h4>
+    {% if post1 != -1 %}
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=post1.post_id) }}" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ post1.title }}</h1>
+        <span class="text">{{ post1.content }}</span>
+        <span class="text">Published on: {{ post1.post_date }}</span>
+        <p style="text-align:right;color:#808080">View: {{ post1.view_times }}</p>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any post result here...</h4>
+    </div>
+    {% endif %}
+
+    {% if post2 != -1 %}
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=post2.post_id) }}" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ post2.title }}</h1>
+        <span class="text">{{ post2.content }}</span>
+        <span class="text">Published on: {{ post2.post_date }}</span>
+        <p style="text-align:right;color:#808080">View: {{ post2.view_times }}</p>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any post result here...</h4>
+    </div>
+    {% endif %}
+
+    {% if post3 != -1 %}
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=post3.post_id) }}" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ post3.title }}</h1>
+        <span class="text">{{ post3.content }}</span>
+        <span class="text">Published on: {{ post3.post_date }}</span>
+        <p style="text-align:right;color:#808080">View: {{ post3.view_times }}</p>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any post result here...</h4>
+    </div>
+    {% endif %}
+
+    {% if post4 != -1 %}
+    <a href="{{ url_for('post_api.recent_posts', id=id, post_id=post4.post_id) }}" methods="get">
+    <div class="container p-3 my-3 border">
+        <h1>{{ post4.title }}</h1>
+        <span class="text">{{ post4.content }}</span>
+        <span class="text">Published on: {{ post4.post_date }}</span>
+        <p style="text-align:right;color:#808080">View: {{ post4.view_times }}</p>
+    </div></a><br>
+    {% else %}
+    <div class="container p-3 my-3 border">
+        <h4 style="color:#808080;">Empty, no any post result here...</h4>
+    </div>
+    {% endif %}
+
 
 	{% if id != -1 %}
     <form method="get" action="{{ url_for('AfterLogin', id=id) }}">
