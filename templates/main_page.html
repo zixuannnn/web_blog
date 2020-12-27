@@ -19,23 +19,21 @@
              <form method="post" action="{{ url_for('user_api.search_user', id=id) }}">
             <input type="text" name="keyword" placeholder="Search User..">
              </form>
-    {% if login == True %}
+    {% if id == -1 %}
 
-    <li class="nav-item">
-                <a class="nav-link" href="#">Dear {{ name }}</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('profile', id=id) }}">Profile</a>
-    </li>
-            <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
-    </li>
-    {% else %}
     <li class="nav-item">
         <a class="nav-link" href="{{ url_for('Login') }}">Login Here</a>
     </li>
      <li>
         <a class="nav-link" href="{{ url_for('SignUp') }}">SignUp Here</a>
+    </li>
+
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('user_api.view_profile', id=id, following_id=id) }}">Dear {{ name }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
     </li>
     {% endif %}
     </ul>
@@ -46,7 +44,6 @@
         <h1 class="display-3" align="center"style ="padding: 0px" >Blog</h1>
         <p class="lead" align="center" style ="height: 10%">Start your Idea Here</p>
     </div>
-    {% if login == True %}
     <div style ="padding-top:5%;padding-bottom: 5% line-height: 10%" >
         <p class="lead" align="center" >
     <a class="btn btn-primary btn-lg" href="{{ url_for('category_python', id=id) }}" role="button" >
@@ -60,21 +57,7 @@
     </a><br>
         </p>
     </div>
-    {% else %}
-    <div style ="padding-top:5%;padding-bottom: 5% line-height: 10%" >
-        <p class="lead" align="center" >
-    <a class="btn btn-primary btn-lg" href="{{ url_for('category_python', id=-1) }}" role="button" >
-        Python
-    </a>
-    <a class="btn btn-primary btn-lg" href="#" role="button" >
-        Java
-    </a>
-    <a class="btn btn-primary btn-lg" href="#" role="button" >
-        Category3
-    </a><br>
-        </p>
-    </div>
-    {% endif %}
+
 
 
 </div>

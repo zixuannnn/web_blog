@@ -16,7 +16,6 @@ import string
 import os
 
 lm = LoginManager(app)
-#lm.login_view = 'index'
 
 app.register_blueprint(post_api)
 app.register_blueprint(user_api)
@@ -187,54 +186,53 @@ def profile(id):
 @app.route('/category_python/<id>', methods=['GET'])
 def category_python(id):
 	python_list = Posts.query.join(PostCategory, PostCategory.post_id == Posts.post_id). \
-		add_columns(Posts.post_id, Posts.view_times, Posts.post_date, Posts.author_id, Posts.content, Posts.title,
-					Posts.thumbs_up). \
-		filter(PostCategory.category_id == 1).order_by(Posts.post_date.desc()).limit(4).all()
-	new_python_list = [-1, -1, -1, -1]
-	for c in range(len(python_list)):
-		new_python_list[c] = python_list[c]
+		filter(PostCategory.category_id == 1).order_by(Posts.post_date.desc()).all()
+	new_python_list = []
+	for p in python_list:
+		new_python_list.append(p.__dict__)
+	data = {"list":new_python_list}
 	if id == "-1":
-		return render_template('category_python.html', id=id, row1=new_python_list[0], row2=new_python_list[1], \
-							   row3=new_python_list[2], row4=new_python_list[3])
+		data["id"] = -1
+		return render_template('category_python.html', data=data)
 	else:
 		user = User.query.filter(User.id == id).first()
-		return render_template('category_python.html', id=id, name=user.username, row1=new_python_list[0], row2=new_python_list[1], \
-							   row3=new_python_list[2], row4=new_python_list[3])
+		data["id"] = id
+		data["name"] = user.username
+		return render_template('category_python.html', data=data)
 
 @app.route('/category_java/<id>', methods=['GET'])
 def category_java(id):
 	java_list = Posts.query.join(PostCategory, PostCategory.post_id == Posts.post_id). \
-		add_columns(Posts.post_id, Posts.view_times, Posts.post_date, Posts.author_id, Posts.content, Posts.title,
-					Posts.thumbs_up). \
-		filter(PostCategory.category_id == 2).order_by(Posts.post_date.desc()).limit(4).all()
-	new_java_list = [-1, -1, -1, -1]
-	for c in range(len(java_list)):
-		new_java_list[c] = java_list[c]
+		filter(PostCategory.category_id == 2).order_by(Posts.post_date.desc()).all()
+	new_java_list = []
+	for p in java_list:
+		new_java_list.append(p.__dict__)
+	data = {"list":new_java_list}
 	if id == "-1":
-		return render_template('category_java.html', id=id, row1=new_java_list[0],
-							   row2=new_java_list[1], \
-							   row3=new_java_list[2], row4=new_java_list[3])
+		data["id"] = -1
+		return render_template('category_java.html', data=data)
 	else:
 		user = User.query.filter(User.id == id).first()
-		return render_template('category_java.html', id=id, name=user.username, row1=new_java_list[0], row2=new_java_list[1],\
-							   row3=new_java_list[2], row4=new_java_list[3])
+		data["id"] = id
+		data["name"] = user.username
+		return render_template('category_java.html', data=data)
 
 @app.route('/category_mysql/<id>', methods=['GET'])
 def category_mysql(id):
 	mysql_list = Posts.query.join(PostCategory, PostCategory.post_id == Posts.post_id). \
-		add_columns(Posts.post_id, Posts.view_times, Posts.post_date, Posts.author_id, Posts.content, Posts.title,
-					Posts.thumbs_up). \
-		filter(PostCategory.category_id == 3).order_by(Posts.post_date.desc()).limit(4).all()
-	new_mysql_list = [-1, -1, -1, -1]
-	for c in range(len(mysql_list)):
-		new_mysql_list[c] = mysql_list[c]
+		filter(PostCategory.category_id == 3).order_by(Posts.post_date.desc()).all()
+	new_mysql_list = []
+	for p in mysql_list:
+		new_mysql_list.append(p.__dict__)
+	data = {"list": new_mysql_list}
 	if id == "-1":
-		return render_template('category_mysql.html', id=id, row1=new_mysql_list[0], \
-							   row2=new_mysql_list[1], row3=new_mysql_list[2], row4=new_mysql_list[3])
+		data["id"] = -1
+		return render_template('category_mysql.html', data=data)
 	else:
 		user = User.query.filter(User.id == id).first()
-		return render_template('category_mysql.html', id=id, name=user.username, row1=new_mysql_list[0], \
-							   row2=new_mysql_list[1], row3=new_mysql_list[2], row4=new_mysql_list[3])
+		data["id"] = id
+		data["name"] = user.username
+		return render_template('category_mysql.html', data=data)
 
 
 

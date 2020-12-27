@@ -33,13 +33,13 @@
         </ul>
         <ul class="navbar-nav ml-auto">
     <li class="nav-item dropdown">
-    {% if login != -1 %}
+    {% if data.login != -1 %}
 
     <li class="nav-item">
                 <span class="nav-link" id="name" href="#">Dear {{ name }}</span>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('profile', id=id) }}">Profile</a>
+        <a class="nav-link" href="{{ url_for('profile', id=data.id) }}">Profile</a>
     </li>
             <li class="nav-item">
         <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
@@ -58,10 +58,10 @@
 
     <div class="col-xs-1" align="center" style ="padding-top:5%;padding-bottom: 5% line-height: 10%">
         <p class="lead" align="center" >
-        <h1>{{ post.title }}</h1>
+        <h1>{{ data.post.title }}</h1>
         <br>
-        <h4>Author: {{ author.username }}</h4>
-        <h4>Published on: {{ post.post_date }}</h4>
+        <a href="{{ url_for('user_api.view_profile', id=data.id, following_id=data.post.author_id) }}">Author: {{ data.author.username }}</a>
+        <h4>Published on: {{ data.post.post_date }}</h4>
          </p>
     </div>
 
@@ -69,81 +69,20 @@
 
     <div class="col-xs-1" align="center" style ="padding-top:5%;padding-bottom: 5% line-height: 10%">
         <p class="lead" align="center" >
-        <p>{{ post.content }}</p>
+        <p>{{ data.post.content }}</p>
     </p>
     </div>
 
-    {% if comment1 != -1 %}
+    {% for c in data.comment %}
     <div class="container p-3 my-3">
-        <h5 style="color:#808080">{{ comment1.username }}</h5>
-        <p style="color:#808080" class="text">Published on: {{ comment1.published_date }}
-        <span style="float:right;color:#808080">Likes: {{ comment1.thumbs_up }}</span>
+        <a style="color:#808080" href="{{ url_for('user_api.view_profile', id=data.id, following_id=c.comment_author_id) }}">{{ c.username }}</a>
+        <p style="color:#808080" class="text">Published on: {{ c.published_date }}
+            <a href="{{ url_for('post_api.comment_like', id=data.id, comment_id=c.comment_id, post_id=data.post.post_id) }}"><span style="float:right;color:#808080">Likes: {{ c.thumbs_up }}</span></a>
         </p>
-        <h5>{{ comment1.comment_title }}</h5>
-        <h6>{{ comment1.content }}</h6>
+        <h5>{{ c.comment_title }}</h5>
+        <h6>{{ c.content }}</h6>
     </div>
-
-    {% else %}
-    <div class="container p-3 my-3">
-        <h5>Comment Empty</h5>
-    </div>
-
-    {% endif %}
-
-
-    {% if comment2 != -1 %}
-
-    <div class="container p-3 my-3">
-        <h5 style="color:#808080">{{ comment2.username }}</h5>
-        <p style="color:#808080" class="text">Published on: {{ comment2.published_date }}
-        <span style="float:right;color:#808080">Likes: {{ comment2.thumbs_up }}</span>
-        </p>
-        <h5>{{ comment2.comment_title }}</h5>
-        <h6>{{ comment2.content }}</h6>
-    </div>
-
-    {% else %}
-    <div class="container p-3 my-3">
-        <h5>Comment Empty</h5>
-    </div>
-
-    {% endif %}
-
-     {% if comment3 != -1 %}
-
-    <div class="container p-3 my-3">
-        <h5 style="color:#808080">{{ comment3.username }}</h5>
-        <p style="color:#808080" class="text">Published on: {{ comment3.published_date }}
-        <span style="float:right;color:#808080">Likes: {{ comment3.thumbs_up }}</span>
-        </p>
-        <h5>{{ comment3.comment_title }}</h5>
-        <h6>{{ comment3.content }}</h6>
-    </div>
-
-    {% else %}
-    <div class="container p-3 my-3">
-        <h5>Comment Empty</h5>
-    </div>
-
-    {% endif %}
-
-    {% if comment4 != -1 %}
-
-    <div class="container p-3 my-3">
-        <h5 style="color:#808080">{{ comment4.username }}</h5>
-        <p style="color:#808080" class="text">Published on: {{ comment4.published_date }}
-        <span style="float:right;color:#808080">Likes: {{ comment4.thumbs_up }}</span>
-        </p>
-        <h5>{{ comment4.comment_title }}</h5>
-        <h6>{{ comment4.content }}</h6>
-    </div>
-
-    {% else %}
-    <div class="container p-3 my-3">
-        <h5>Comment Empty</h5>
-    </div>
-
-    {% endif %}
+    {% endfor %}
 
     <div class="col-xs-1" align="center" style ="padding-top:5%;padding-bottom: 5% line-height: 10%">
     <div class="container pb-cmnt-container" align="center">
@@ -151,7 +90,7 @@
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <form class="form-inline" method="post" action="{{ url_for('post_api.recent_posts', id=id, post_id=post.post_id) }}">
+                    <form class="form-inline" method="post" action="{{ url_for('post_api.recent_posts', id=data.id, post_id=data.post.post_id) }}">
                         <input type="text" class="form-control" name="comment_title" id="comment_title" placeholder="Enter your comment title.." style=" width: 120%;">
                         <br>
                         <textarea placeholder="Write your comment here!" class="pb-cmnt-textarea" name="comment" id="comment"></textarea>
