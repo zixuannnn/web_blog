@@ -40,7 +40,7 @@
                 <span class="nav-link" id="name" href="#">Dear {{ name }}</span>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('profile', id=id) }}">Profile</a>
+        <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
     </li>
             <li class="nav-item">
         <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
@@ -63,7 +63,7 @@
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <form class="form-inline" method="post" action="{{ url_for('post_api.new_post', id=id) }}">
+                    <form class="form-inline" method="post" action="{{ url_for('post_api.new_post') }}">
                         <input type="text" class="form-control" name="article_title" id="article_title" placeholder="Enter your article title.." style=" width: 120%;">
                         <br>
 

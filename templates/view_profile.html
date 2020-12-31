@@ -23,10 +23,10 @@
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     {% if data.id != -1 %}
-    <a class="navbar-brand" href="{{ url_for('AfterLogin', id=data.id) }}">Blog</a>
+    <a class="navbar-brand" href="{{ url_for('AfterLogin') }}">Blog</a>
 
     {% else %}
-    <a class="navbar-brand" href="{{ url_for('Main_Page', id=data.id) }}">Blog</a>
+    <a class="navbar-brand" href="{{ url_for('Main_Page') }}">Blog</a>
 
     {% endif %}
 
@@ -51,14 +51,14 @@
     <a class="lead">{{ data.following.intro }}</a><br>
     <br>
 
-    <form method="get" action="{{ url_for('profile', id=data.id) }}">
+    <form method="get" action="{{ url_for('profile') }}">
         <input class="btn btn-primary btn-lg" type="submit" value="Update Profile">
     </form>
 </div>
 
 <div>
     {% for p in data.post %}
-    <a href="{{ url_for('post_api.recent_posts', id=data.id, post_id=p.post_id) }}" methods="get">
+    <a href="{{ url_for('post_api.recent_posts', post_id=p.post_id) }}" methods="get">
     <div class="container p-3 my-3 border">
         <h1>{{ p.title }}</h1>
         <span class="text">{{ p.content }}</span>

@@ -30,7 +30,7 @@
 
     {% else %}
     <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('user_api.view_profile', id=id, following_id=id) }}">Dear {{ name }}</a>
+        <a class="nav-link" href="{{ url_for('user_api.view_profile', following_id=id) }}">Dear {{ name }}</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
@@ -46,17 +46,25 @@
     </div>
     <div style ="padding-top:5%;padding-bottom: 5% line-height: 10%" >
         <p class="lead" align="center" >
-    <a class="btn btn-primary btn-lg" href="{{ url_for('category_python', id=id) }}" role="button" >
+    <a class="btn btn-primary btn-lg" href="{{ url_for('category_python') }}" role="button" >
         Python
     </a>
-    <a class="btn btn-primary btn-lg" href="{{ url_for('category_java', id=id) }}" role="button" >
+    <a class="btn btn-primary btn-lg" href="{{ url_for('category_java') }}" role="button" >
         Java
     </a>
-    <a class="btn btn-primary btn-lg" href="{{ url_for('category_mysql', id=id) }}" role="button" >
+    <a class="btn btn-primary btn-lg" href="{{ url_for('category_mysql') }}" role="button" >
         MySQL
     </a><br>
         </p>
     </div>
+
+    {% block footer %}
+       <footer class="footer navbar-fixed-bottom">
+           <div class="container" align="center">
+            Developed by Florence Liu, 2020 | Email：florencelzx865@gmail.com
+           </div>
+       </footer>
+   {% endblock %}
 
 
 

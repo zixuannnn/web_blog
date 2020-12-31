@@ -39,7 +39,7 @@
                 <span class="nav-link" id="name" href="#">Dear {{ name }}</span>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('profile', id=data.id) }}">Profile</a>
+        <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
     </li>
             <li class="nav-item">
         <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
@@ -60,7 +60,7 @@
         <p class="lead" align="center" >
         <h1>{{ data.post.title }}</h1>
         <br>
-        <a href="{{ url_for('user_api.view_profile', id=data.id, following_id=data.post.author_id) }}">Author: {{ data.author.username }}</a>
+        <a href="{{ url_for('user_api.view_profile', following_id=data.post.author_id) }}">Author: {{ data.author.username }}</a>
         <h4>Published on: {{ data.post.post_date }}</h4>
          </p>
     </div>
@@ -75,9 +75,9 @@
 
     {% for c in data.comment %}
     <div class="container p-3 my-3">
-        <a style="color:#808080" href="{{ url_for('user_api.view_profile', id=data.id, following_id=c.comment_author_id) }}">{{ c.username }}</a>
+        <a style="color:#808080" href="{{ url_for('user_api.view_profile', following_id=c.comment_author_id) }}">{{ c.username }}</a>
         <p style="color:#808080" class="text">Published on: {{ c.published_date }}
-            <a href="{{ url_for('post_api.comment_like', id=data.id, comment_id=c.comment_id, post_id=data.post.post_id) }}"><span style="float:right;color:#808080">Likes: {{ c.thumbs_up }}</span></a>
+            <a href="{{ url_for('post_api.comment_like', comment_id=c.comment_id, post_id=data.post.post_id) }}"><span style="float:right;color:#808080">Likes: {{ c.thumbs_up }}</span></a>
         </p>
         <h5>{{ c.comment_title }}</h5>
         <h6>{{ c.content }}</h6>
@@ -90,7 +90,7 @@
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <form class="form-inline" method="post" action="{{ url_for('post_api.recent_posts', id=data.id, post_id=data.post.post_id) }}">
+                    <form class="form-inline" method="post" action="{{ url_for('post_api.recent_posts', post_id=data.post.post_id) }}">
                         <input type="text" class="form-control" name="comment_title" id="comment_title" placeholder="Enter your comment title.." style=" width: 120%;">
                         <br>
                         <textarea placeholder="Write your comment here!" class="pb-cmnt-textarea" name="comment" id="comment"></textarea>

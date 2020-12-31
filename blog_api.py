@@ -37,31 +37,45 @@ def load_user(id):
 
 @app.route('/logout')
 def logout():
-    logout_user()
-    return redirect(url_for('Main_Page'))
+	session.pop('id', -1)
+	session.pop('username', None)
+	logout_user()
+	return redirect(url_for('Main_Page'))
 
 @app.route('/', methods=['GET'])
 def Main_Page():
+	if 'id' in session:
+		id = session['id']
+		return redirect(url_for('AfterLogin'))
 	return render_template('main_page.html', login=False, id=-1)
 
-@app.route('/main/<id>', methods=['GET'])
-def AfterLogin(id):
+@app.route('/main', methods=['GET'])
+def AfterLogin():
+	id = session['id']
 	row = User.query.filter(User.id==id).first()
+	session['id'] = row.id
+	session['username'] = row.username
 	return render_template('main_page.html', login=True, name=row.username, id=id)
 
 @app.route('/login', methods=['GET', 'POST'])
 def Login():
 	if request.method == 'GET':
+		if 'id' in session:
+			id = session['id']
+			row = User.query.filter(User.id == id).first()
+			return render_template('last_login.html', id=id, date=row.lastLogin)
 		return render_template('login.html')
 	else:
 		email = request.form['email']
 		password = request.form['pwd']
-		row = User.query.filter(User.email==email).first()
+		row = User.query.filter(User.email == email).first()
 		last_login_date = row.lastLogin
 		if row.password_plain == password:
 			date = datetime.now()
 			row.lastLogin = date
 			db.session.commit()
+			session['id'] = row.id
+			session['username'] = row.username
 			return render_template('last_login.html', id=row.id, date=last_login_date)
 
 @app.route('/authorize/<provider>')
@@ -69,7 +83,7 @@ def oauth_login(provider):
 	date = datetime.now()
 	if not current_user.is_anonymous:
 		row = User.query.filter(User.email==current_user.email).first()
-		return redirect(url_for('AfterLogin', id=row.id))
+		return redirect(url_for('AfterLogin'))
 	oauth = oa.OAuthSignIn.get_provider(provider)
 	return oauth.authorize()
 
@@ -79,7 +93,7 @@ def oauth_callback(provider):
 	if not current_user.is_anonymous:
 		email = current_user.email
 		row = User.query.filter(current_user.email==email).first()
-		return redirect(url_for('AfterLogin', id=row.id))
+		return redirect(url_for('AfterLogin'))
 	oauth = oa.OAuthSignIn.get_provider(provider)
 	social_id, username, email = oauth.callback()
 	if social_id is None: # email is invalid
@@ -102,8 +116,9 @@ def oauth_callback(provider):
 		row.lastLogin = date
 		db.session.commit()
 	login_user(user_record, True)
-	user_record = OAuth.query.filter_by(social_id=social_id).first()
-	return redirect(url_for('update_profile', id=user_record.id))
+	session['id'] = user_record.id
+	session['username'] = user_record.username
+	return redirect(url_for('update_profile'))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def SignUp():
@@ -125,23 +140,27 @@ def SignUp():
 		db.session.commit()
 		user_record = User.query.filter_by(id=id).first()
 		login_user(user_record, True)
-		return redirect(url_for('update_profile', id=id))
+		return redirect(url_for('update_profile'))
 
-@app.route('/update_profile/<id>', methods=['GET', 'POST'])
-def update_profile(id):
-	row = User.query.filter(User.id==id).first()
-	if request.method == 'GET':
-		return render_template('update_profile.html', row=row, id=id)
+@app.route('/update_profile', methods=['GET', 'POST'])
+def update_profile():
+	if 'id' in session:
+		row = User.query.filter(User.id==id).first()
+		if request.method == 'GET':
+			return render_template('update_profile.html', row=row)
+		else:
+			username = request.form['username']
+			email = request.form['email']
+			row.email = email
+			row.username = username
+			db.session.commit()
+			return redirect(url_for('AfterLogin'))
 	else:
-		username = request.form['username']
-		email = request.form['email']
-		row.email = email
-		row.username = username
-		db.session.commit()
-		return redirect(url_for('AfterLogin', id=id))
+		return render_template('error_login_prompt.html')
 
-@app.route('/profile_page/<id>', methods=['GET', 'POST'])
-def profile(id):
+@app.route('/profile_page', methods=['GET', 'POST'])
+def profile():
+	id = session['id']
 	row = User.query.filter(User.id == id).first()
 	if request.method == 'GET':
 		if row:
@@ -181,54 +200,57 @@ def profile(id):
 		if intro != "":
 			row.intro = intro
 		db.session.commit()
-		return redirect(url_for('profile', id=id))
+		return redirect(url_for('profile'))
 
-@app.route('/category_python/<id>', methods=['GET'])
-def category_python(id):
+@app.route('/category_python', methods=['GET'])
+def category_python():
 	python_list = Posts.query.join(PostCategory, PostCategory.post_id == Posts.post_id). \
 		filter(PostCategory.category_id == 1).order_by(Posts.post_date.desc()).all()
 	new_python_list = []
 	for p in python_list:
 		new_python_list.append(p.__dict__)
 	data = {"list":new_python_list}
-	if id == "-1":
+	if 'id' not in session:
 		data["id"] = -1
 		return render_template('category_python.html', data=data)
 	else:
+		id = session['id']
 		user = User.query.filter(User.id == id).first()
 		data["id"] = id
 		data["name"] = user.username
 		return render_template('category_python.html', data=data)
 
-@app.route('/category_java/<id>', methods=['GET'])
-def category_java(id):
+@app.route('/category_java', methods=['GET'])
+def category_java():
 	java_list = Posts.query.join(PostCategory, PostCategory.post_id == Posts.post_id). \
 		filter(PostCategory.category_id == 2).order_by(Posts.post_date.desc()).all()
 	new_java_list = []
 	for p in java_list:
 		new_java_list.append(p.__dict__)
 	data = {"list":new_java_list}
-	if id == "-1":
+	if 'id' not in session:
 		data["id"] = -1
 		return render_template('category_java.html', data=data)
 	else:
+		id = session['id']
 		user = User.query.filter(User.id == id).first()
 		data["id"] = id
 		data["name"] = user.username
 		return render_template('category_java.html', data=data)
 
-@app.route('/category_mysql/<id>', methods=['GET'])
-def category_mysql(id):
+@app.route('/category_mysql', methods=['GET'])
+def category_mysql():
 	mysql_list = Posts.query.join(PostCategory, PostCategory.post_id == Posts.post_id). \
 		filter(PostCategory.category_id == 3).order_by(Posts.post_date.desc()).all()
 	new_mysql_list = []
 	for p in mysql_list:
 		new_mysql_list.append(p.__dict__)
 	data = {"list": new_mysql_list}
-	if id == "-1":
+	if 'id' not in session:
 		data["id"] = -1
 		return render_template('category_mysql.html', data=data)
 	else:
+		id = session['id']
 		user = User.query.filter(User.id == id).first()
 		data["id"] = id
 		data["name"] = user.username

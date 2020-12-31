@@ -17,7 +17,7 @@
     </ul>
 </nav>
 <div class="container"><br>
-<form method="post" action="{{ url_for('update_profile', id=id) }}">
+<form method="post" action="{{ url_for('update_profile') }}">
     {% if row == null %}
     <div class="from-group">
         <label for="email">Email: </label>
@@ -49,7 +49,7 @@
     <br>
     <input class="btn btn-primary btn-lg" type="submit" value="Update">
 </form>
-<form method="get" action="{{ url_for('AfterLogin', id=id) }}">
+<form method="get" action="{{ url_for('AfterLogin') }}">
     <input class="btn btn-primary btn-lg" type="submit" value="Skip">
 </form>
 </div>
