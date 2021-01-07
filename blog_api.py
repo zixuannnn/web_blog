@@ -1,3 +1,4 @@
+import pytz
 from flask import Flask, request, render_template, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
@@ -37,7 +38,7 @@ def load_user(id):
 
 @app.route('/logout')
 def logout():
-	session.pop('id', -1)
+	session.pop('id', None)
 	session.pop('username', None)
 	logout_user()
 	return redirect(url_for('Main_Page'))
@@ -71,16 +72,19 @@ def Login():
 		row = User.query.filter(User.email == email).first()
 		last_login_date = row.lastLogin
 		if row.password_plain == password:
-			date = datetime.now()
+			tz = pytz.timezone('Canada/Atlantic')
+			date = datetime.now(tz=tz)
 			row.lastLogin = date
 			db.session.commit()
 			session['id'] = row.id
 			session['username'] = row.username
+			login_user(row, True)
 			return render_template('last_login.html', id=row.id, date=last_login_date)
 
 @app.route('/authorize/<provider>')
 def oauth_login(provider):
-	date = datetime.now()
+	tz = pytz.timezone('Canada/Atlantic')
+	date = datetime.now(tz=tz)
 	if not current_user.is_anonymous:
 		row = User.query.filter(User.email==current_user.email).first()
 		return redirect(url_for('AfterLogin'))
@@ -89,7 +93,8 @@ def oauth_login(provider):
 
 @app.route('/callback/<provider>')
 def oauth_callback(provider):
-	date = datetime.now()
+	tz = pytz.timezone('Canada/Atlantic')
+	date = datetime.now(tz=tz)
 	if not current_user.is_anonymous:
 		email = current_user.email
 		row = User.query.filter(current_user.email==email).first()
@@ -110,10 +115,10 @@ def oauth_callback(provider):
 		oauth_user = OAuth(social_id=social_id, email="", id=id, register_date=date)
 		db.session.add(oauth_user)
 		db.session.commit()
-		user_record = OAuth.query.filter_by(social_id=social_id).first()
+		user_record = User.query.filter_by(social_id=social_id).first()
 	else:
-		row = User.query.filter(User.id==user_record.id).first()
-		row.lastLogin = date
+		user_record = User.query.filter(User.id==user_record.id).first()
+		user_record.lastLogin = date
 		db.session.commit()
 	login_user(user_record, True)
 	session['id'] = user_record.id
@@ -130,16 +135,18 @@ def SignUp():
 		email = request.form['email']
 		email_eligible = User.query.filter(User.email==email).first()
 		if email_eligible is not None:
-			return render_template('Error.html')
+			return render_template('Error.html', info="This email "+email+" has been used before, please choose another email...")
 		password_hash = hash(password)
 		id = get_id(20)
-		date = datetime.now()
+		tz = pytz.timezone('Canada/Atlantic')
+		date = datetime.now(tz=tz)
 		user = User(id=id, username=username, fName=None, mName=None,lName=None, email=email, photo="default_photo.jpg", password_plain=password, \
 					password_hash=str(password_hash),intro = "No any introduction...", profile=None, register_date=date, lastLogin=date, follower=0, following=0)
 		db.session.add(user)
 		db.session.commit()
 		user_record = User.query.filter_by(id=id).first()
-		login_user(user_record, True)
+		session['id'] = id
+		session['username'] = username
 		return redirect(url_for('update_profile'))
 
 @app.route('/update_profile', methods=['GET', 'POST'])

@@ -1,6 +1,6 @@
+import pytz
 from flask import Flask, request, render_template, redirect, url_for, Blueprint, session
 from sqlalchemy import func
-
 from web_config import app
 from blog_table import db, User, Posts, Comment, Category, PostCategory, OAuth
 from datetime import datetime
@@ -46,7 +46,7 @@ def recent_posts(post_id):
             title = request.form['comment_title']
             if comment == "" or title == "":
                 return render_template('Error.html', info="Please fill out your title or comment content")
-            date = datetime.now()
+            date = datetime.now(pytz.utc)
             comment_input = Comment(post_id=post_id, comment_author_id=id, \
                                     content=comment, comment_title=title, thumbs_up=0, published_date=date)
             db.session.add(comment_input)
@@ -69,7 +69,10 @@ def new_post():
             id = session['id']
             article = request.form['article']
             title = request.form['article_title']
-            date = datetime.now()
+            tz = pytz.timezone('Canada/Atlantic')
+            date = datetime.now(tz=tz)
+            if not request.form.get('python') and not request.form.get('java') and not request.form.get('mysql'):
+                return render_template("Error.html", info="Please choose at least 1 category to place your post")
             post_input = Posts(author_id=id, title=title, content=article, view_times=0, thumbs_up=0, post_date=date)
             db.session.add(post_input)
             db.session.commit()

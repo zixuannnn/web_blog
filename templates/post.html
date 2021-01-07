@@ -61,7 +61,7 @@
         <h1>{{ data.post.title }}</h1>
         <br>
         <a href="{{ url_for('user_api.view_profile', following_id=data.post.author_id) }}">Author: {{ data.author.username }}</a>
-        <h4>Published on: {{ data.post.post_date }}</h4>
+        <h4>Published on: {{ data.post.post_date }} AST</h4>
          </p>
     </div>
 
@@ -76,7 +76,7 @@
     {% for c in data.comment %}
     <div class="container p-3 my-3">
         <a style="color:#808080" href="{{ url_for('user_api.view_profile', following_id=c.comment_author_id) }}">{{ c.username }}</a>
-        <p style="color:#808080" class="text">Published on: {{ c.published_date }}
+        <p style="color:#808080" class="text">Published on: {{ c.published_date }} AST
             <a href="{{ url_for('post_api.comment_like', comment_id=c.comment_id, post_id=data.post.post_id) }}"><span style="float:right;color:#808080">Likes: {{ c.thumbs_up }}</span></a>
         </p>
         <h5>{{ c.comment_title }}</h5>
